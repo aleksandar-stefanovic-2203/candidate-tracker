@@ -32,6 +32,7 @@ import com.manageitout.candidate_tracker.models.Application;
 import com.manageitout.candidate_tracker.models.ApplicationStatus;
 import com.manageitout.candidate_tracker.models.JobPosition;
 
+// TODO: Check again!!!
 @RestController
 @RequestMapping("/api/applications")
 public class ApplicationController {
