@@ -20,14 +20,14 @@ The routes above describe the planned API; their controllers are not implemented
 
 ## Run with Docker Compose
 
-Docker Compose starts PostgreSQL, applies the Flyway migrations, builds the Spring Boot API, and starts it. Requirements: Docker with the Compose plugin.
+Docker Compose starts PostgreSQL, applies the Flyway migrations, and builds and starts the Spring Boot API and Angular frontend. Requirements: Docker with the Compose plugin.
 
 ```powershell
 docker compose up --build -d
 docker compose ps
-docker compose logs api
+docker compose logs api frontend
 ```
 
-The API is available at `http://localhost:8080` and PostgreSQL at `localhost:5432` by default. Local development defaults are `candidate_tracker` for the database and user, with password `candidate_tracker_dev`. Set `API_PORT`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, or `POSTGRES_PORT` in a `.env` file to override them; do not use the development password outside local development.
+The frontend is available at `http://localhost:4200`, the API at `http://localhost:8080`, and PostgreSQL at `localhost:5432` by default. The frontend's Nginx server forwards `/api` requests to the API container. Set `FRONTEND_PORT`, `API_PORT`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, or `POSTGRES_PORT` in a `.env` file to override the ports and database settings; do not use the development password outside local development.
 
 Flyway migrations live in `backend/src/main/resources/db/migration` and are applied by the API at startup after PostgreSQL becomes healthy. To stop the services while retaining database data, run `docker compose down`. To also delete the local database volume, run `docker compose down -v`.

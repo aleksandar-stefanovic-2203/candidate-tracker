@@ -1,0 +1,140 @@
+<div class="application-page">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Candidate Tracker početna strana">
+      <span class="brand-mark" aria-hidden="true">CT</span>
+      <span>Candidate Tracker</span>
+    </a>
+    <span class="topbar-note">Karijera počinje ovde</span>
+  </header>
+
+  <main class="content">
+    <section class="intro" aria-labelledby="page-title">
+      <span class="eyebrow">Pridruži nam se</span>
+      <h1 id="page-title">Tvoj sledeći korak počinje jednom prijavom.</h1>
+      <p class="intro-copy">
+        Zainteresovan/a si za rad sa nama? Popuni formular i pošalji svoju biografiju.
+        Naš tim će pregledati prijavu i javiti ti se.
+      </p>
+
+      <div class="note-card">
+        <span class="note-icon" aria-hidden="true">i</span>
+        <p>Pripremi CV u PDF formatu. Fajl može biti veličine do 5 MB.</p>
+      </div>
+    </section>
+
+    <section class="form-card" aria-labelledby="form-title">
+      <div class="form-heading">
+        <span class="form-step">PRIJAVA ZA POSAO</span>
+        <h2 id="form-title">Osnovni podaci</h2>
+        <p>Polja označena zvezdicom su obavezna.</p>
+      </div>
+
+      <form>
+        <div class="form-grid">
+          <div class="field">
+            <label for="name">Ime i prezime <span aria-hidden="true">*</span></label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              minlength="2"
+              maxlength="100"
+              placeholder="npr. Ana Anić"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="email">Imejl adresa <span aria-hidden="true">*</span></label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="254"
+              placeholder="ana@example.com"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="phone">Broj telefona <span aria-hidden="true">*</span></label>
+            <input
+              id="phone"
+              name="phoneNumber"
+              type="tel"
+              autocomplete="tel"
+              minlength="6"
+              maxlength="20"
+              placeholder="+381 60 123 4567"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="position">Pozicija <span aria-hidden="true">*</span></label>
+            <select id="position" name="jobPositionId" required>
+              <option value="" selected disabled>Izaberi poziciju</option>
+              <option value="1">Softverski inženjer</option>
+              <option value="2">Programer korisničkog interfejsa</option>
+              <option value="4">Inženjer za testiranje softvera</option>
+            </select>
+          </div>
+
+          <div class="field field-wide">
+            <label for="recommendation">Ko vas je preporučio? <span aria-hidden="true">*</span></label>
+            <input
+              id="recommendation"
+              name="recommendation"
+              type="text"
+              minlength="2"
+              maxlength="100"
+              placeholder="Ime osobe ili izvor oglasa"
+              required
+            />
+          </div>
+
+          <div class="field field-wide">
+            <label for="message">Kratka poruka <span class="optional">(opciono)</span></label>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              maxlength="1000"
+              placeholder="Napiši nekoliko reči o sebi ili dodaj dodatne informacije."
+            ></textarea>
+          </div>
+
+          <div class="field field-wide">
+            <label for="cv">Biografija (CV) <span aria-hidden="true">*</span></label>
+            <input
+              id="cv"
+              class="file-input"
+              name="cv"
+              type="file"
+              accept=".pdf,application/pdf"
+              required
+            />
+            <span class="field-hint">PDF format, najviše 5 MB.</span>
+          </div>
+        </div>
+
+        <label class="consent">
+          <input name="consent" type="checkbox" required />
+          <span>
+            Saglasan/na sam da se moji podaci koriste za obradu ove prijave.
+            <span aria-hidden="true">*</span>
+          </span>
+        </label>
+
+        <button class="submit-button" type="button">
+          Pošalji prijavu
+          <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <p class="privacy-note">Tvoji podaci se koriste isključivo u vezi sa prijavom za posao.</p>
+    </section>
+  </main>
+</div>
