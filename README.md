@@ -1,5 +1,6 @@
-# candidate-tracker
-Web application for collecting and tracking job applications: candidates apply through a public form, staff review CVs, set statuses and leave notes. Angular + Spring Boot.
+# Candidate Tracker
+
+Candidate Tracker is a web application for managing job applications from submission through review. Candidates apply for positions and submit their CVs through a public form; staff can review applications, update their statuses, and leave notes. The intended stack is Angular, Spring Boot, and PostgreSQL.
 
 ## Database (Docker + Flyway)
 
