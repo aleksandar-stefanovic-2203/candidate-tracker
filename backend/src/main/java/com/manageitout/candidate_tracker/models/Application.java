@@ -31,8 +31,8 @@ public class Application {
 	@Column(name = "phone_number", nullable = false, length = 20)
 	private String phoneNumber;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "job_position_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "job_position_id", nullable = true)
 	private JobPosition jobPosition;
 
 	@Column(nullable = false, length = 100)

@@ -3,7 +3,7 @@ CREATE TABLE "application" (
   "name" varchar(100) NOT NULL CHECK (LENGTH(name) >= 2),
   "email" varchar(254) NOT NULL,
   "phone_number" varchar(20) NOT NULL CHECK (LENGTH(phone_number) >= 6),
-  "job_position_id" integer NOT NULL,
+  "job_position_id" integer,
   "recommendation" varchar(100) NOT NULL CHECK (LENGTH(recommendation) >= 2),
   "cv_original_name" varchar(255) NOT NULL,
   "cv_stored_name" varchar(40) NOT NULL,
@@ -20,4 +20,4 @@ CREATE TABLE "job_position" (
   "active" boolean NOT NULL DEFAULT true
 );
 
-ALTER TABLE "application" ADD CONSTRAINT "application_position" FOREIGN KEY ("job_position_id") REFERENCES "job_position" ("id");
+ALTER TABLE "application" ADD CONSTRAINT "application_position" FOREIGN KEY ("job_position_id") REFERENCES "job_position" ("id") ON UPDATE CASCADE ON DELETE RESTRICT;

@@ -65,9 +65,11 @@ public class ApplicationController {
 		String recommendation = requiredText(form, "recommendation", 2, 100);
 		String message = optionalText(form, "message", 1000);
 		OffsetDateTime consentGivenAt = parseConsentTime(form.get("consentGivenAt"));
-		int jobPositionId = parseJobPositionId(form.get("jobPositionId"));
-		JobPosition jobPosition = jobPositionRepository.findById(jobPositionId)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job position not found"));
+		Integer jobPositionId = parseOptionalJobPositionId(form.get("jobPositionId"));
+		JobPosition jobPosition = jobPositionId == null
+				? null
+				: jobPositionRepository.findById(jobPositionId)
+						.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job position not found"));
 		Application existing = applicationRepository.findFirstByEmailIgnoreCase(email).orElse(null);
 
 		String originalFilename = getOriginalFilename(cv);
@@ -146,7 +148,10 @@ public class ApplicationController {
 		}
 	}
 
-	private int parseJobPositionId(Object value) {
+	private Integer parseOptionalJobPositionId(Object value) {
+		if (value == null || (value instanceof String text && text.isBlank())) {
+			return null;
+		}
 		try {
 			int id = Integer.parseInt(String.valueOf(value));
 			if (id > 0) {
