@@ -29,7 +29,7 @@
         <p>Polja označena zvezdicom su obavezna.</p>
       </div>
 
-      <form>
+      <form [formGroup]="applicationForm" (ngSubmit)="submitApplication()" novalidate>
         <div class="form-grid">
           <div class="field">
             <label for="name">Ime i prezime <span aria-hidden="true">*</span></label>
@@ -41,8 +41,14 @@
               minlength="2"
               maxlength="100"
               placeholder="npr. Ana Anić"
+              formControlName="name"
+              [attr.aria-invalid]="validation.fieldError('name') ? 'true' : null"
+              [attr.aria-describedby]="validation.fieldError('name') ? 'name-error' : null"
               required
             />
+            @if (validation.fieldError('name'); as error) {
+              <span id="name-error" class="field-error" role="alert">{{ error }}</span>
+            }
           </div>
 
           <div class="field">
@@ -54,8 +60,14 @@
               autocomplete="email"
               maxlength="254"
               placeholder="ana@example.com"
+              formControlName="email"
+              [attr.aria-invalid]="validation.fieldError('email') ? 'true' : null"
+              [attr.aria-describedby]="validation.fieldError('email') ? 'email-error' : null"
               required
             />
+            @if (validation.fieldError('email'); as error) {
+              <span id="email-error" class="field-error" role="alert">{{ error }}</span>
+            }
           </div>
 
           <div class="field">
@@ -68,18 +80,33 @@
               minlength="6"
               maxlength="20"
               placeholder="+381 60 123 4567"
+              formControlName="phone_number"
+              [attr.aria-invalid]="validation.fieldError('phone_number') ? 'true' : null"
+              [attr.aria-describedby]="validation.fieldError('phone_number') ? 'phone-error' : null"
               required
             />
+            @if (validation.fieldError('phone_number'); as error) {
+              <span id="phone-error" class="field-error" role="alert">{{ error }}</span>
+            }
           </div>
 
           <div class="field">
             <label for="position">Pozicija</label>
-            <select id="position" name="job_position_id">
-              <option value="" selected>Bez izabrane pozicije</option>
+            <select
+              id="position"
+              name="job_position_id"
+              formControlName="job_position_id"
+              [attr.aria-invalid]="validation.fieldError('job_position_id') ? 'true' : null"
+              [attr.aria-describedby]="validation.fieldError('job_position_id') ? 'position-error' : null"
+            >
+              <option value="" selected>Generalna prijava</option>
               @for (position of positions(); track position.id) {
                 <option [value]="position.id">{{ position.title }}</option>
               }
             </select>
+            @if (validation.fieldError('job_position_id'); as error) {
+              <span id="position-error" class="field-error" role="alert">{{ error }}</span>
+            }
             @if (positionsLoading()) {
               <span class="field-hint" role="status">Učitavanje aktivnih pozicija...</span>
             } @else if (positionsLoadError()) {
@@ -98,8 +125,14 @@
               minlength="2"
               maxlength="100"
               placeholder="Ime osobe ili izvor oglasa"
+              formControlName="recommendation"
+              [attr.aria-invalid]="validation.fieldError('recommendation') ? 'true' : null"
+              [attr.aria-describedby]="validation.fieldError('recommendation') ? 'recommendation-error' : null"
               required
             />
+            @if (validation.fieldError('recommendation'); as error) {
+              <span id="recommendation-error" class="field-error" role="alert">{{ error }}</span>
+            }
           </div>
 
           <div class="field field-wide">
@@ -110,7 +143,13 @@
               rows="4"
               maxlength="1000"
               placeholder="Napiši nekoliko reči o sebi ili dodaj dodatne informacije."
+              formControlName="message"
+              [attr.aria-invalid]="validation.fieldError('message') ? 'true' : null"
+              [attr.aria-describedby]="validation.fieldError('message') ? 'message-error' : null"
             ></textarea>
+            @if (validation.fieldError('message'); as error) {
+              <span id="message-error" class="field-error" role="alert">{{ error }}</span>
+            }
           </div>
 
           <div class="field field-wide">
@@ -121,22 +160,42 @@
               name="cv"
               type="file"
               accept=".pdf,application/pdf"
+              (change)="onCvChange($event)"
+              [attr.aria-invalid]="validation.fieldError('cv') ? 'true' : null"
+              [attr.aria-describedby]="validation.fieldError('cv') ? 'cv-error' : 'cv-hint'"
               required
             />
-            <span class="field-hint">PDF format, najviše 5 MB.</span>
+            <span id="cv-hint" class="field-hint">PDF format, najviše 5 MB.</span>
+            @if (validation.fieldError('cv'); as error) {
+              <span id="cv-error" class="field-error" role="alert">{{ error }}</span>
+            }
           </div>
         </div>
 
         <label class="consent">
-          <input name="consent" type="checkbox" required />
+          <input
+            name="consent"
+            type="checkbox"
+            formControlName="consent"
+            [attr.aria-invalid]="validation.fieldError('consent') ? 'true' : null"
+            [attr.aria-describedby]="validation.fieldError('consent') ? 'consent-error' : null"
+            required
+          />
           <span>
             Saglasan/na sam da se moji podaci koriste za obradu ove prijave.
             <span aria-hidden="true">*</span>
+            @if (validation.fieldError('consent'); as error) {
+              <span id="consent-error" class="field-error" role="alert">{{ error }}</span>
+            }
           </span>
         </label>
 
-        <button class="submit-button" type="button">
-          Pošalji prijavu
+        @if (submitError()) {
+          <p class="form-error" role="alert">{{ submitError() }}</p>
+        }
+
+        <button class="submit-button" type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Šaljem prijavu...' : 'Pošalji prijavu' }}
           <span aria-hidden="true">→</span>
         </button>
       </form>

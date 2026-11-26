@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+
+.application-page .field-error {
+  display: block;
+  margin-top: -3px;
+  color: #d34b60;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.application-page .field input.ng-invalid.ng-touched,
+.application-page .field select.ng-invalid.ng-touched,
+.application-page .field textarea.ng-invalid.ng-touched {
+  border-color: #d34b60;
+}
+
+.application-page .form-error {
+  margin: 0 0 12px;
+  color: #d34b60;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.application-page .submit-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
