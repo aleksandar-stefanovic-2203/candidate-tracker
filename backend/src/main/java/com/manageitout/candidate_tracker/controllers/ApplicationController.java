@@ -15,6 +15,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -33,9 +41,11 @@ import com.manageitout.candidate_tracker.dao.JobPositionRepository;
 import com.manageitout.candidate_tracker.models.Application;
 import com.manageitout.candidate_tracker.models.ApplicationStatus;
 import com.manageitout.candidate_tracker.models.JobPosition;
+import com.manageitout.candidate_tracker.openapi.OpenApiSchemas;
 
 @RestController
 @RequestMapping("/api/applications")
+@Tag(name = "Applications", description = "Application submission and review endpoints")
 public class ApplicationController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
@@ -55,11 +65,48 @@ public class ApplicationController {
 	}
 
 	@GetMapping
+	@Operation(summary = "List applications", description = "Returns all submitted applications.")
+	@ApiResponses({
+			@ApiResponse(
+					responseCode = "200",
+					description = "Applications returned",
+					content = @Content(array = @ArraySchema(schema = @Schema(implementation = Application.class))))
+	})
 	public List<Application> getApplications() {
 		return applicationRepository.findAll();
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@Operation(
+			summary = "Submit or update an application",
+			description = """
+					Submits a candidate application or replaces the existing application with the same email address.
+					The `application` part is JSON. Required fields are `name` (2-100 characters), `email` (valid
+					address, up to 254 characters), `phone_number` (6-20 characters), `recommendation`
+					(2-100 characters), and `consent_given_at` (ISO 8601 date-time). `job_position_id` and `message`
+					are optional; the message may be up to 1000 characters. The required `cv` part must be a PDF no
+					larger than 5 MB.
+					""",
+			requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+					required = true,
+					content = @Content(
+							mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+							schema = @Schema(implementation = OpenApiSchemas.ApplicationSubmissionForm.class),
+							encoding = @Encoding(name = "application", contentType = MediaType.APPLICATION_JSON_VALUE))))
+	@ApiResponses({
+			@ApiResponse(
+					responseCode = "200",
+					description = "Existing application updated",
+					content = @Content(schema = @Schema(implementation = OpenApiSchemas.ApplicationSubmissionResponse.class))),
+			@ApiResponse(
+					responseCode = "201",
+					description = "New application created",
+					content = @Content(schema = @Schema(implementation = OpenApiSchemas.ApplicationSubmissionResponse.class))),
+			@ApiResponse(responseCode = "400", description = "Application fields or uploaded file are invalid"),
+			@ApiResponse(responseCode = "404", description = "The specified job position does not exist"),
+			@ApiResponse(responseCode = "413", description = "The CV exceeds the 5 MB limit"),
+			@ApiResponse(responseCode = "415", description = "The CV is not a PDF")
+	})
 	public ResponseEntity<Map<String, Object>> submitApplication(
 			@RequestPart("application") Map<String, Object> form,
 			@RequestPart("cv") MultipartFile cv) {

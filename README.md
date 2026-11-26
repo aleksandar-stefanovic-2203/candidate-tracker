@@ -21,6 +21,8 @@ The `application` part uses `name`, `email`, `phone_number`, `recommendation`, a
 
 The applications endpoint returns an array of application records, including candidate contact details, application status, and job position (which may be `null`). These endpoints are currently public.
 
+Interactive API documentation is available at `http://localhost:8080/swagger-ui.html`; the raw OpenAPI JSON is at `http://localhost:8080/v3/api-docs`.
+
 ## Run with Docker Compose
 
 Docker Compose starts PostgreSQL, applies the Flyway migrations, and builds and starts the Spring Boot API and Angular frontend. Requirements: Docker with the Compose plugin.
