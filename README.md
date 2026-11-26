@@ -9,14 +9,17 @@ Candidate Tracker is a web application for managing job applications from submis
 | Method | Path | Query params | Access | Description |
 |---|---|---|---|---|
 | GET | `/api/positions` | Optional `active` boolean: `true` for active positions, `false` for inactive. If omitted, returns all positions. | public | List positions |
+| GET | `/api/applications` | — | public | List all applications |
 
 ### POST
 
 | Method | Path | Request body | Access | Description |
 |---|---|---|---|---|
-| POST | `/api/applications` | `multipart/form-data` with application details and CV | public | Submit an application |
+| POST | `/api/applications` | `multipart/form-data` with an `application` part containing application details and a `cv` PDF file | public | Submit or update an application by email |
 
-The routes above describe the planned API; their controllers are not implemented yet.
+The `application` part uses `name`, `email`, `phone_number`, `recommendation`, and `consent_given_at`. `job_position_id` is optional; omit it or submit `null`/an empty value if no position is selected. `message` is also optional.
+
+The applications endpoint returns an array of application records, including candidate contact details, application status, and job position (which may be `null`). These endpoints are currently public.
 
 ## Run with Docker Compose
 

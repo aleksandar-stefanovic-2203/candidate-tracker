@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -52,6 +54,11 @@ public class ApplicationController {
 		this.jobPositionRepository = jobPositionRepository;
 	}
 
+	@GetMapping
+	public List<Application> getApplications() {
+		return applicationRepository.findAll();
+	}
+
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Map<String, Object>> submitApplication(
 			@RequestPart("application") Map<String, Object> form,
@@ -61,11 +68,11 @@ public class ApplicationController {
 		if (!EMAIL_PATTERN.matcher(email).matches()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email address");
 		}
-		String phoneNumber = requiredText(form, "phoneNumber", 6, 20);
+		String phoneNumber = requiredText(form, "phone_number", 6, 20);
 		String recommendation = requiredText(form, "recommendation", 2, 100);
 		String message = optionalText(form, "message", 1000);
-		OffsetDateTime consentGivenAt = parseConsentTime(form.get("consentGivenAt"));
-		Integer jobPositionId = parseOptionalJobPositionId(form.get("jobPositionId"));
+		OffsetDateTime consentGivenAt = parseConsentTime(form.get("consent_given_at"));
+		Integer jobPositionId = parseOptionalJobPositionId(form.get("job_position_id"));
 		JobPosition jobPosition = jobPositionId == null
 				? null
 				: jobPositionRepository.findById(jobPositionId)
@@ -112,7 +119,7 @@ public class ApplicationController {
 				.body(Map.of(
 						"id", saved.getId(),
 						"status", saved.getStatus(),
-						"receivedAt", saved.getReceivedAt()));
+						"received_at", saved.getReceivedAt()));
 	}
 
 	private String requiredText(Map<String, Object> form, String field, int minLength, int maxLength) {
@@ -139,12 +146,12 @@ public class ApplicationController {
 
 	private OffsetDateTime parseConsentTime(Object value) {
 		if (!(value instanceof String text)) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "consentGivenAt is required");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "consent_given_at is required");
 		}
 		try {
 			return OffsetDateTime.parse(text);
 		} catch (java.time.format.DateTimeParseException exception) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid consentGivenAt", exception);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid consent_given_at", exception);
 		}
 	}
 
@@ -158,9 +165,9 @@ public class ApplicationController {
 				return id;
 			}
 		} catch (NumberFormatException exception) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid jobPositionId", exception);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid job_position_id", exception);
 		}
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid jobPositionId");
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid job_position_id");
 	}
 
 	private String getOriginalFilename(MultipartFile cv) {
