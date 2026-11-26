@@ -103,7 +103,7 @@ public class ApplicationController {
 					description = "New application created",
 					content = @Content(schema = @Schema(implementation = OpenApiSchemas.ApplicationSubmissionResponse.class))),
 			@ApiResponse(responseCode = "400", description = "Application fields or uploaded file are invalid"),
-			@ApiResponse(responseCode = "404", description = "The specified job position does not exist"),
+			@ApiResponse(responseCode = "404", description = "The specified job position does not exist or is inactive"),
 			@ApiResponse(responseCode = "413", description = "The CV exceeds the 5 MB limit"),
 			@ApiResponse(responseCode = "415", description = "The CV is not a PDF")
 	})
@@ -120,10 +120,14 @@ public class ApplicationController {
 		String message = optionalText(form, "message", 1000);
 		OffsetDateTime consentGivenAt = parseConsentTime(form.get("consent_given_at"));
 		Integer jobPositionId = parseOptionalJobPositionId(form.get("job_position_id"));
-		JobPosition jobPosition = jobPositionId == null
-				? null
-				: jobPositionRepository.findById(jobPositionId)
-						.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job position not found"));
+		JobPosition jobPosition = null;
+		if (jobPositionId != null) {
+			jobPosition = jobPositionRepository.findById(jobPositionId)
+					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job position not found"));
+			if (!jobPosition.isActive()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job position is inactive");
+			}
+		}
 		Application existing = applicationRepository.findFirstByEmailIgnoreCase(email).orElse(null);
 		String previousCvStoredName = existing == null ? null : existing.getCvStoredName();
 

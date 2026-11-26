@@ -23,6 +23,33 @@ The applications endpoint returns an array of application records, including can
 
 Interactive API documentation is available at `http://localhost:8080/swagger-ui.html`; the raw OpenAPI JSON is at `http://localhost:8080/v3/api-docs`.
 
+## Run tests
+
+### Backend
+
+From the repository root, run the controller tests (these use mocked repositories and do not require a database):
+
+```powershell
+.\backend\mvnw.cmd -f backend\pom.xml '-Dtest=ApplicationControllerTest,JobPositionControllerTest' test
+```
+
+To run the full backend test suite, start PostgreSQL first for the Spring application-context test:
+
+```powershell
+docker compose up -d db
+.\backend\mvnw.cmd -f backend\pom.xml test
+```
+
+### Frontend
+
+From the repository root:
+
+```powershell
+Set-Location frontend
+npm ci
+npm test
+```
+
 ## Run with Docker Compose
 
 Docker Compose starts PostgreSQL, applies the Flyway migrations, and builds and starts the Spring Boot API and Angular frontend. Requirements: Docker with the Compose plugin.
