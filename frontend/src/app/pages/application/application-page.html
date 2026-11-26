@@ -76,10 +76,17 @@
             <label for="position">Pozicija</label>
             <select id="position" name="job_position_id">
               <option value="" selected>Bez izabrane pozicije</option>
-              <option value="1">Softverski inženjer</option>
-              <option value="2">Programer korisničkog interfejsa</option>
-              <option value="4">Inženjer za testiranje softvera</option>
+              @for (position of positions(); track position.id) {
+                <option [value]="position.id">{{ position.title }}</option>
+              }
             </select>
+            @if (positionsLoading()) {
+              <span class="field-hint" role="status">Učitavanje aktivnih pozicija...</span>
+            } @else if (positionsLoadError()) {
+              <span class="field-hint" role="alert">Aktivne pozicije nisu mogle da se učitaju.</span>
+            } @else if (positions().length === 0) {
+              <span class="field-hint" role="status">Trenutno nema aktivnih pozicija.</span>
+            }
           </div>
 
           <div class="field field-wide">
