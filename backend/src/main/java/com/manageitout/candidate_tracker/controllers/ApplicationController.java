@@ -32,7 +32,6 @@ import com.manageitout.candidate_tracker.models.Application;
 import com.manageitout.candidate_tracker.models.ApplicationStatus;
 import com.manageitout.candidate_tracker.models.JobPosition;
 
-// TODO: Check again!!!
 @RestController
 @RequestMapping("/api/applications")
 public class ApplicationController {
@@ -164,7 +163,7 @@ public class ApplicationController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CV file is required");
 		}
 		if (cv.getSize() > MAX_CV_SIZE_BYTES) {
-			throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "CV must not exceed 5 MB");
+			throw new ResponseStatusException(HttpStatus.CONTENT_TOO_LARGE, "CV must not exceed 5 MB");
 		}
 		String submittedName = cv.getOriginalFilename();
 		if (submittedName == null || submittedName.isBlank()) {

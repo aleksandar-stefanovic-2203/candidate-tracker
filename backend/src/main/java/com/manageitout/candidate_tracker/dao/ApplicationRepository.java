@@ -12,6 +12,11 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 	Optional<Application> findFirstByEmailIgnoreCase(String email);
 
 	@Transactional
+	/*
+		TODO: Currently the application with status other than new will also get modified when
+		user with the same email uploads an application. Check with mentor if this is the
+		expected behaviour.
+	*/
 	default Application saveOrUpdateByEmail(Application application) {
 		return findFirstByEmailIgnoreCase(application.getEmail())
 				.map(existing -> {
