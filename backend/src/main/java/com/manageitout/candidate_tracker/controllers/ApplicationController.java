@@ -78,6 +78,7 @@ public class ApplicationController {
 				: jobPositionRepository.findById(jobPositionId)
 						.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job position not found"));
 		Application existing = applicationRepository.findFirstByEmailIgnoreCase(email).orElse(null);
+		String previousCvStoredName = existing == null ? null : existing.getCvStoredName();
 
 		String originalFilename = getOriginalFilename(cv);
 		byte[] cvContents = readPdf(cv, originalFilename);
@@ -111,8 +112,8 @@ public class ApplicationController {
 			throw exception;
 		}
 
-		if (existing != null && existing.getCvStoredName() != null) {
-			deletePreviousCv(existing.getCvStoredName());
+		if (previousCvStoredName != null) {
+			deletePreviousCv(previousCvStoredName);
 		}
 		HttpStatus responseStatus = existing == null ? HttpStatus.CREATED : HttpStatus.OK;
 		return ResponseEntity.status(responseStatus)
