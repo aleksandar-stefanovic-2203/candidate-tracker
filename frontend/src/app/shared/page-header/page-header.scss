@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.topbar {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  color: #17233c;
+  text-decoration: none;
+}
+
+.brand-logo {
+  display: block;
+  width: 160px;
+  height: auto;
+}
+
+.topbar-note {
+  color: #64718a;
+  font-size: 13px;
+}
+
+@media (max-width: 520px) {
+  .topbar {
+    min-height: 66px;
+    padding: 0 19px;
+  }
+
+  .brand-logo {
+    width: 132px;
+  }
+
+  .topbar-note {
+    font-size: 11px;
+  }
+}

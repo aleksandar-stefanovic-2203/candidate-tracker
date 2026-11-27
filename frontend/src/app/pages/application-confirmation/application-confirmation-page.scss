@@ -16,42 +16,6 @@
     #f5f7fb;
 }
 
-.topbar {
-  display: flex;
-  min-height: 76px;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 32px;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  color: #17233c;
-  font-size: 15px;
-  font-weight: 750;
-  text-decoration: none;
-}
-
-.brand-mark {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  place-items: center;
-  border-radius: 11px;
-  background: #2459d3;
-  color: #fff;
-  font-size: 12px;
-}
-
-.topbar-note {
-  color: #64718a;
-  font-size: 13px;
-}
-
 .confirmation-content {
   display: grid;
   min-height: calc(100vh - 76px);
@@ -153,15 +117,6 @@ h1 {
 }
 
 @media (max-width: 520px) {
-  .topbar {
-    min-height: 66px;
-    padding: 0 19px;
-  }
-
-  .topbar-note {
-    font-size: 11px;
-  }
-
   .confirmation-content {
     min-height: calc(100vh - 66px);
     padding: 30px 16px;

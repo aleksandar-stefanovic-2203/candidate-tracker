@@ -165,7 +165,7 @@ class ApplicationControllerTest {
 				MediaType.APPLICATION_PDF_VALUE,
 				oversizedPdf);
 
-		submit(validApplication(), cv).andExpect(status().isPayloadTooLarge());
+		submit(validApplication(), cv).andExpect(status().isContentTooLarge());
 	}
 
 	@Test

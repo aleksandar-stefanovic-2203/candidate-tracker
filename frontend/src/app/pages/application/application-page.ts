@@ -5,11 +5,12 @@ import type { ApplicationSubmission } from '../../models/application.model';
 import type { JobPosition } from '../../models/job-position.model';
 import { ApplicationService } from '../../services/application.service';
 import { JobPositionService } from '../../services/job-position.service';
+import { PageHeader } from '../../shared/page-header/page-header';
 import { ApplicationValidation } from '../../validation/application-validation';
 
 @Component({
   selector: 'app-application-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PageHeader],
   templateUrl: './application-page.html',
   styleUrl: './application-page.scss',
 })
